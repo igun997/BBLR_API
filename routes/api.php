@@ -104,6 +104,11 @@ Route::prefix("blog/admin")->namespace("BLOG")->middleware("jwt_gate:1")->group(
     Route::get("news","Admin@news_read");
     Route::post("news","Admin@news_insert");
     Route::delete("news/{id}","Admin@news_delete");
-    Route::put("news/{id}","Admin@news_update");
+    Route::post("news/{id}","Admin@news_update");
+
+    Route::get("category","Admin@category_read");
+    Route::post("category","Admin@category_insert");
+    Route::delete("category/{id}","Admin@category_delete");
+    Route::post("category/{id}","Admin@category_update");
 
 });

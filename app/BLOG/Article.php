@@ -1,42 +1,60 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\BLOG;
 
+use App\Casts\FileBase;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * Class Article
+ *
  * @property int $id
  * @property int $user_id
- * @property int $category_id
- * @property string $featured_image
- * @property string $featured_video
+ * @property string|null $featured_image
+ * @property string|null $featured_video
  * @property string $title
  * @property string $content
- * @property string $updated_at
- * @property string $created_at
+ * @property int $category_id
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ *
  * @property Category $category
  * @property User $user
+ *
+ * @package App\BLOG
  */
 class Article extends Model
 {
-    /**
-     * @var array
-     */
-    protected $fillable = ['user_id', 'category_id', 'featured_image', 'featured_video', 'title', 'content', 'updated_at', 'created_at'];
+	protected $table = 'articles';
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function category()
-    {
-        return $this->belongsTo('App\BLOG\Category');
-    }
+	protected $casts = [
+		'user_id' => 'int',
+		'featured_image' => FileBase::class,
+		'featured_video' => FileBase::class,
+		'category_id' => 'int'
+	];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo('App\BLOG\User');
-    }
+	protected $fillable = [
+		'user_id',
+		'featured_image',
+		'featured_video',
+		'title',
+		'content',
+		'category_id'
+	];
+
+	public function category()
+	{
+		return $this->belongsTo(Category::class);
+	}
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 }

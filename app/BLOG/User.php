@@ -1,40 +1,61 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\BLOG;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * Class User
+ * 
  * @property int $id
+ * @property string|null $fullname
  * @property string $username
  * @property string $password
  * @property string $email
- * @property string $phone
+ * @property string|null $phone
  * @property int $level
- * @property boolean $status
- * @property string $token
- * @property string $created_at
- * @property string $updated_at
- * @property Article[] $articles
+ * @property bool $status
+ * @property string|null $token
+ * @property Carbon $created_at
+ * @property Carbon|null $updated_at
+ * 
+ * @property Collection|Article[] $articles
+ *
+ * @package App\BLOG
  */
 class User extends Model
 {
+	protected $table = 'users';
 
-    protected $hidden = [
-        "password",
-        "token",
-    ];
+	protected $casts = [
+		'level' => 'int',
+		'status' => 'bool'
+	];
 
-    /**
-     * @var array
-     */
-    protected $fillable = ['username','fullname', 'password', 'email', 'phone', 'level', 'status', 'token', 'created_at', 'updated_at'];
+	protected $hidden = [
+		'password',
+		'token'
+	];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function articles()
-    {
-        return $this->hasMany('App\BLOG\Article');
-    }
+	protected $fillable = [
+		'fullname',
+		'username',
+		'password',
+		'email',
+		'phone',
+		'level',
+		'status',
+		'token'
+	];
+
+	public function articles()
+	{
+		return $this->hasMany(Article::class);
+	}
 }

@@ -1,37 +1,55 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\BLOG;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * Class Category
+ * 
  * @property int $id
- * @property int $parent_id
  * @property string $name
+ * @property int|null $parent_id
  * @property int $created_at
+ * 
  * @property Category $category
- * @property Article[] $articles
+ * @property Collection|Article[] $articles
+ * @property Collection|Category[] $categories
+ *
+ * @package App\BLOG
  */
 class Category extends Model
 {
-    /**
-     * @var array
-     */
-    protected $fillable = ['parent_id', 'name', 'created_at'];
+	protected $table = 'categories';
+	public $timestamps = false;
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function category()
-    {
-        return $this->belongsTo('App\BLOG\Category', 'parent_id');
-    }
+	protected $casts = [
+		'parent_id' => 'int',
+		'created_at' => 'int'
+	];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function articles()
-    {
-        return $this->hasMany('App\BLOG\Article');
-    }
+	protected $fillable = [
+		'name',
+		'parent_id'
+	];
+
+	public function category()
+	{
+		return $this->belongsTo(Category::class, 'parent_id');
+	}
+
+	public function articles()
+	{
+		return $this->hasMany(Article::class);
+	}
+
+	public function categories()
+	{
+		return $this->hasMany(Category::class, 'parent_id');
+	}
 }
