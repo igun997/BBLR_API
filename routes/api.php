@@ -89,3 +89,26 @@ Route::prefix("bblr/nurse")->namespace("BBLR")->group(function (){
 
 
 });
+
+
+Route::prefix("blog/basic")->namespace("BLOG")->group(function (){
+    Route::post("auth","Auth@index");
+    Route::get("me","Auth@me")->middleware("jwt_gate");
+    Route::put("me","Auth@me_update")->middleware("jwt_gate");
+    Route::post("register","Auth@register");
+    Route::get("verify","Auth@verify");
+});
+
+Route::prefix("blog/admin")->namespace("BLOG")->middleware("jwt_gate:1")->group(function (){
+
+    Route::get("news","Admin@news_read");
+    Route::post("news","Admin@news_insert");
+    Route::delete("news/{id}","Admin@news_delete");
+    Route::post("news/{id}","Admin@news_update");
+
+    Route::get("category","Admin@category_read");
+    Route::post("category","Admin@category_insert");
+    Route::delete("category/{id}","Admin@category_delete");
+    Route::post("category/{id}","Admin@category_update");
+
+});

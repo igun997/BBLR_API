@@ -16,7 +16,8 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
-        "league/color-extractor": "0.3.*"
+        "league/color-extractor": "0.3.*",
+        "reliese/laravel": "^0.0.16"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
