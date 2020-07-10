@@ -15,7 +15,7 @@ class JWTGate
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next,$level)
+    public function handle($request, Closure $next,$level = NULL)
     {
         $pub = file_get_contents(base_path()."/main.key.pub");
         $is_header = $request->hasHeader("Authorization");
@@ -35,14 +35,15 @@ class JWTGate
                         return response()->json(["code"=>400,"msg"=>"Token Invalid"],200);
                     }
                 }
-
-                if ($level != $decode->level){
-                    return response()->json(["code"=>400,"msg"=>"Invalid Access Right"],200);
+                if ($level){
+                    if ($level != $decode->level){
+                        return response()->json(["code"=>400,"msg"=>"Invalid Access Right "],200);
+                    }
                 }
 
                 $request->attributes->add(["info"=>$decode]);
                 return $next($request);
-            }catch (\InvalidArgumentException $e){
+            }catch (\Exception $e){
                 return  response()->json(["code"=>400,"msg"=>$e],200);
             }
         }else{
