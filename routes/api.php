@@ -112,3 +112,7 @@ Route::prefix("blog/admin")->namespace("BLOG")->middleware("jwt_gate:1")->group(
     Route::post("category/{id}","Admin@category_update");
 
 });
+
+Route::prefix("blog/public")->namespace("BLOG")->group(function (){
+    Route::get("feed","News@feed");
+});

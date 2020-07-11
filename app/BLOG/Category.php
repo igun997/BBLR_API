@@ -11,12 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Category
- * 
+ *
  * @property int $id
  * @property string $name
  * @property int|null $parent_id
  * @property int $created_at
- * 
+ *
  * @property Category $category
  * @property Collection|Article[] $articles
  * @property Collection|Category[] $categories
@@ -30,12 +30,13 @@ class Category extends Model
 
 	protected $casts = [
 		'parent_id' => 'int',
-		'created_at' => 'int'
+		'created_at' => 'date'
 	];
 
 	protected $fillable = [
 		'name',
-		'parent_id'
+		'parent_id',
+        'created_at'
 	];
 
 	public function category()

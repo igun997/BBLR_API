@@ -123,11 +123,15 @@ class Admin extends Controller
     public function category_read(Request $req){
         $req->validate([
             "id"=>"exists:categories,id",
-            "limit"=>"numeric",
-            "sort"=>"numeric",
+            "parent"=>"boolean",
+            "limit"=>"numeric|gt:0",
+            "sort"=>"numeric|in:1,2",
         ]);
         if ($req->has("id")){
             $row = Category::where(["id"=>$req->id]);
+            if ($req->has("parent")){
+                $row->where(["parent_id"=>NULL]);
+            }
             if ($row->count() > 0){
                 $data = $row->first();
                 $data->parent = $data->category()->get();
@@ -137,11 +141,15 @@ class Admin extends Controller
             }
         }else{
             if ($req->sort == 1){
-                $obj = Category::orderBy("created_at","ASC")->paginate($req->limit);
+                $obj = Category::orderBy("created_at","ASC");
 
             }else{
-                $obj = Category::orderBy("created_at","DESC")->paginate($req->limit);
+                $obj = Category::orderBy("created_at","DESC");
             }
+            if ($req->has("parent")){
+                $obj->where(["parent_id"=>NULL]);
+            }
+            $obj = $obj->paginate($req->limit);
             $obj->getCollection()->transform(function ($value) {
                 // Your code here
                 $value->parent = $value->category()->get();
@@ -149,7 +157,6 @@ class Admin extends Controller
             });
             return $obj;
         }
-
     }
 
     public function category_insert(Request $req){
@@ -159,7 +166,7 @@ class Admin extends Controller
         ]);
 
         $data = $req->all();
-
+        $data["created_at"] = date("Y-m-d");
         $save = Category::create($data);
         if ($save){
             return response()->json(["code"=>200,"msg"=>"OK"],200);
