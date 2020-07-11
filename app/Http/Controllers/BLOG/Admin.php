@@ -147,7 +147,13 @@ class Admin extends Controller
                 $obj = Category::orderBy("created_at","DESC");
             }
             if ($req->has("parent")){
-                $obj->where(["parent_id"=>NULL]);
+                if ($req->parent){
+                    $obj->where(["parent_id"=>NULL]);
+
+                }else{
+                    $obj->where("parent_id","!=",NULL);
+
+                }
             }
             $obj = $obj->paginate($req->limit);
             $obj->getCollection()->transform(function ($value) {
