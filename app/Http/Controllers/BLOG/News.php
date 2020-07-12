@@ -61,7 +61,8 @@ class News extends Controller
     public function category(Request $req){
         $req->validate([
             "id"=>"exists:categories,id",
-            "parent"=>"required|boolean",
+            "parent"=>"boolean",
+            "parent_id"=>"exists:categories,id",
             "limit"=>"numeric|gt:0",
             "sort"=>"numeric|in:1,2",
         ]);
@@ -69,6 +70,9 @@ class News extends Controller
             $row = Category::where(["id"=>$req->id]);
             if ($req->has("parent")){
                 $row->where(["parent_id"=>NULL]);
+            }
+            if ($req->has("parent_id")){
+                $row->where(["parent_id"=>$req->parent_id]);
             }
             if ($row->count() > 0){
                 $data = $row->first();
