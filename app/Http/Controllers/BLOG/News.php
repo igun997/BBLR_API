@@ -97,6 +97,10 @@ class News extends Controller
 
                 }
             }
+
+            if ($req->has("parent_id")){
+                $obj->where(["parent_id"=>$req->parent_id]);
+            }
             $obj = $obj->paginate($req->limit);
             $obj->getCollection()->transform(function ($value) {
                 // Your code here
