@@ -43,7 +43,8 @@ class Admin extends Controller
     }
 
     public function news_insert(Request $req){
-        $path = "/public/blog/article";
+        $path_image = "/public/blog/article";
+        $path_video = "/public/blog/article";
         $req->validate([
             "featured_image"=>"mimes:jpg,png,jpeg,gif",
             "featured_video"=>"mimes:mp4",
@@ -56,12 +57,12 @@ class Admin extends Controller
         $info = $req->get("info");
         $data["user_id"] = $info->id;
         if ($req->has("featured_image")){
-            $path = $req->file("featured_image")->store($path);
+            $path = $req->file("featured_image")->store($path_image);
             $data["featured_image"] = $path;
         }
 
         if ($req->has("featured_video")){
-            $path = $req->file("featured_video")->store($path);
+            $path = $req->file("featured_video")->store($path_video);
             $data["featured_video"] = $path;
         }
         $save = Article::create($data);
@@ -74,7 +75,8 @@ class Admin extends Controller
     }
 
     public function news_update(Request $req,$id){
-        $path = "/public/blog/article";
+        $path_image = "/public/blog/article";
+        $path_video = "/public/blog/article";
         $req->validate([
             "featured_image"=>"mimes:jpg,png,jpeg,gif",
             "featured_video"=>"mimes:mp4",
@@ -91,12 +93,12 @@ class Admin extends Controller
                 "category_id"=>$req->category_id,
             ];
             if ($req->has("featured_image")){
-                $path = $req->file("featured_image")->store($path);
+                $path = $req->file("featured_image")->store($path_image);
                 $build["featured_image"] = $path;
             }
 
             if ($req->has("featured_video")){
-                $path = $req->file("featured_video")->store($path);
+                $path = $req->file("featured_video")->store($path_video);
                 $build["featured_video"] = $path;
             }
             $update = $find->update($build);
